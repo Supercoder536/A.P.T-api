@@ -15,7 +15,7 @@ const getAreas = asynchandler(async (req, res) => {
 //@method   POST api/areas
 //@access   Private
 const createArea = asynchandler(async (req, res) => {
-  const { name, banner, user } = req.body;
+  const { name, banner } = req.body;
   if (!name || !banner) {
     res.status(400);
     throw new Error("Invalid Params");

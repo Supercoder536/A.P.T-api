@@ -1,34 +1,68 @@
-//@desc     Create Project
-//@method   POST api/areas/:id/projects
+const asynchandler = require("express-async-handler");
+const projectSchema = require("../models/projectSchema.js");
+const taskSchema = require("../models/taskSchema.js");
+//@desc     Get Project
+//@method   GET api/areas/:id/
 //@access   Private
-const getProjects = (req, res) => {
-  res.status(200).json({ message: `Get projects in area ${req.params.id}` });
-};
+const getProjects = asynchandler(async (req, res) => {
+  const projects = await projectSchema.find({ area: req.params.id });
+  res.status(200).json({ projects });
+});
 
 //@desc     Create Project
-//@method   POST api/areas/:id/projects
+//@method   POST api/areas/:id/
 //@access   Private
-const createProject = (req, res) => {
-  res.status(200).json({ message: `Create project in area ${req.params.id}` });
-};
+const createProject = asynchandler(async (req, res) => {
+  const { name, desc } = req.body;
+  if (!name || !desc) {
+    res.status(400);
+    throw new Error("Invalid Request");
+  }
+  const createdProject = await projectSchema.create({
+    name,
+    desc,
+    area: req.params.id,
+  });
+  res.status(200).json(createdProject);
+});
 
 //@desc     Update Project
-//@method   PUT api/areas/:id/projects/:pid
+//@method   PUT api/areas/:id/:pid
 //@access   Private
-const updateProject = (req, res) => {
-  res.status(200).json({
-    message: `Update project ${req.params.pid} in area ${req.params.id}`,
+const updateProject = asynchandler(async (req, res) => {
+  const { name, desc } = req.body;
+  if (!name || !desc) {
+    res.status(400);
+    throw new Error("Invalid Request");
+  }
+  const project = await projectSchema.findById(req.params.pid);
+  if (!project) {
+    res.status(400);
+    throw new Error("No such project exsists");
+  }
+  const updatedProject = await projectSchema.findByIdAndUpdate(req.params.id, {
+    name,
+    desc,
   });
-};
+  res.status(200).json(updatedProject);
+});
 
-//@desc     Update Project
-//@method   PUT api/areas/:id/projects/:pid
+//@desc     Delete Project
+//@method   DEL api/areas/:id/:pid
 //@access   Private
-const deleteProject = (req, res) => {
-  res.status(200).json({
-    message: `Delete project ${req.params.pid} in area ${req.params.id}`,
+const deleteProject = asynchandler(async (req, res) => {
+  const project = await projectSchema.findById(req.params.pid);
+  if (!project) {
+    res.status(400);
+    throw new Error("No such project exsists");
+  }
+  const subtasks = await taskSchema.find({ project: project._id });
+  subtasks.forEach(async (subtask) => {
+    await taskSchema.findByIdAndDelete(subtask._id);
   });
-};
+  const deletedProject = await projectSchema.findByIdAndDelete(req.params.id);
+  res.status(200).json(deletedProject._id);
+});
 
 module.exports = {
   getProjects,
