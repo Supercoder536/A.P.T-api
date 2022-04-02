@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const projectSchema = mongoose.Schema({
   name: String,
   desc: String,
-  workspace: {
+  area: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Area",
   },

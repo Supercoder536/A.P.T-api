@@ -16,22 +16,18 @@ const createProject = (req, res) => {
 //@method   PUT api/areas/:id/projects/:pid
 //@access   Private
 const updateProject = (req, res) => {
-  res
-    .status(200)
-    .json({
-      message: `Update project ${req.params.pid} in area ${req.params.id}`,
-    });
+  res.status(200).json({
+    message: `Update project ${req.params.pid} in area ${req.params.id}`,
+  });
 };
 
 //@desc     Update Project
 //@method   PUT api/areas/:id/projects/:pid
 //@access   Private
 const deleteProject = (req, res) => {
-  res
-    .status(200)
-    .json({
-      message: `Delete project ${req.params.pid} in area ${req.params.id}`,
-    });
+  res.status(200).json({
+    message: `Delete project ${req.params.pid} in area ${req.params.id}`,
+  });
 };
 
 module.exports = {
