@@ -16,14 +16,13 @@ const getAreas = asynchandler(async (req, res) => {
 //@access   Private
 const createArea = asynchandler(async (req, res) => {
   const { name, banner, user } = req.body;
-  if (!name || !banner || !user) {
+  if (!name || !banner) {
     res.status(400);
     throw new Error("Invalid Params");
   }
   const area = await areaSchema.create({
     name,
     banner,
-    user,
   });
   res.status(200).json(area);
 });
