@@ -40,7 +40,7 @@ const updateProject = asynchandler(async (req, res) => {
     res.status(400);
     throw new Error("No such project exsists");
   }
-  const updatedProject = await projectSchema.findByIdAndUpdate(req.params.id, {
+  const updatedProject = await projectSchema.findByIdAndUpdate(req.params.pid, {
     name,
     desc,
   });
