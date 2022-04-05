@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Supercoder536/express-editorx.git"
+    "url": "git+https://github.com/Supercoder536/A.P.T-api.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Supercoder536/express-editorx/issues"
+    "url": "https://github.com/Supercoder536/A.P.T-api/issues"
   },
-  "homepage": "https://github.com/Supercoder536/express-editorx#readme",
+  "homepage": "https://github.com/Supercoder536/A.P.T-api#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.0.0",
