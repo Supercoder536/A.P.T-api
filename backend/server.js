@@ -3,7 +3,7 @@ const dotenv = require("dotenv").config();
 const mainRouter = require("./routes/mainRouter.js");
 const userRouter = require("./routes/userRouter.js");
 const port = process.env.PORT || 5000;
-const errorHandler = require("./middleware/errorMiddleware.js");
+const { errorHandler } = require("./middleware/errorMiddleware.js");
 const connectToDB = require("./config/db.js");
 
 const app = express();
