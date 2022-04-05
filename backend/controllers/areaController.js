@@ -7,7 +7,7 @@ const taskSchema = require("../models/taskSchema.js");
 //@method   GET api/areas
 //@access   Private
 const getAreas = asynchandler(async (req, res) => {
-  const areas = await areaSchema.find();
+  const areas = await areaSchema.find({ user: req.user._id });
   res.status(200).json({ areas });
 });
 
@@ -23,6 +23,7 @@ const createArea = asynchandler(async (req, res) => {
   const area = await areaSchema.create({
     name,
     banner,
+    user: req.user._id,
   });
   res.status(200).json(area);
 });
@@ -35,6 +36,10 @@ const updateArea = asynchandler(async (req, res) => {
   if (!area) {
     res.status(400);
     throw new Error("No such area exsists");
+  }
+  if (area.user !== req.user.id) {
+    res.status(400);
+    throw new Error("Invalid User");
   }
   const updatedArea = await areaSchema.findByIdAndUpdate(
     req.params.id,
@@ -51,6 +56,10 @@ const deleteArea = asynchandler(async (req, res) => {
   if (!area) {
     res.status(400);
     throw new Error("No such area exsists");
+  }
+  if (area.user !== req.user.id) {
+    res.status(400);
+    throw new Error("Invalid User");
   }
   const projects = await projectSchema.find({ area: area._id });
   projects.forEach(async (project) => {

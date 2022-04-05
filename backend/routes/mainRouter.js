@@ -18,17 +18,24 @@ const {
   updateTasks,
   deleteTasks,
 } = require("../controllers/taskController.js");
+const { protect } = require("../middleware/authMiddleware.js");
 
 //Area Routes
-router.route("/").get(getAreas).post(createArea);
-router.route("/:id").put(updateArea).delete(deleteArea);
+router.route("/").get(protect, getAreas).post(protect, createArea);
+router.route("/:id").put(protect, updateArea).delete(protect, deleteArea);
 
 //Project Routes
-router.route("/:id").get(getProjects).post(createProject);
-router.route("/:id/:pid").put(updateProject).delete(deleteProject);
+router.route("/:id").get(protect, getProjects).post(protect, createProject);
+router
+  .route("/:id/:pid")
+  .put(protect, updateProject)
+  .delete(protect, deleteProject);
 
 //Task Routes
-router.route("/:id/:pid").get(getTasks).post(createTask);
-router.route("/:id/:pid/:tid").put(updateTasks).delete(deleteTasks);
+router.route("/:id/:pid").get(protect, getTasks).post(protect, createTask);
+router
+  .route("/:id/:pid/:tid")
+  .put(protect, updateTasks)
+  .delete(protect, deleteTasks);
 
 module.exports = router;
