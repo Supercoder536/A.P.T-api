@@ -12,10 +12,9 @@ connectToDB();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use(errorHandler);
-
 app.use("/api/areas", mainRouter);
 app.use("/api/users", userRouter);
+app.use(errorHandler);
 
 app.listen(port, () =>
   console.log(`Express Server is running on port ${port}`)
