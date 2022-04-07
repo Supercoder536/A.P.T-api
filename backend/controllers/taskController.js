@@ -5,7 +5,10 @@ const taskSchema = require("../models/taskSchema.js");
 //@method   GET api/areas/:id/:pid/
 //@access   Private
 const getTasks = asynchandler(async (req, res) => {
-  const tasks = await taskSchema.find({ project: req.params.pid });
+  const tasks = await taskSchema.find({
+    project: req.params.pid,
+    user: req.user._id,
+  });
   res.status(200).json({ tasks });
 });
 
@@ -21,6 +24,7 @@ const createTask = asynchandler(async (req, res) => {
   const createdTask = await taskSchema.create({
     name,
     project: req.params.pid,
+    user: req.user._id,
   });
   res.status(200).json(createdTask);
 });
@@ -33,6 +37,10 @@ const updateTasks = asynchandler(async (req, res) => {
   if (!task) {
     res.status(400);
     throw new Error("No such task exsists");
+  }
+  if (task.user !== req.user._id) {
+    res.status(400);
+    throw new Error("Task does not belong to this user");
   }
   const updatedTask = await taskSchema.findByIdAndUpdate(
     req.params.tid,
@@ -49,6 +57,10 @@ const deleteTasks = asynchandler(async (req, res) => {
   if (!task) {
     res.status(400);
     throw new Error("No such task exsists");
+  }
+  if (task.user !== req.user._id) {
+    res.status(400);
+    throw new Error("Task does not belong to this user");
   }
   const deletedTask = await taskSchema.findByIdAndDelete(req.params.tid);
   res.status(200).json(deletedTask);

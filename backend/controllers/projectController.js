@@ -5,7 +5,10 @@ const taskSchema = require("../models/taskSchema.js");
 //@method   GET api/areas/:id/
 //@access   Private
 const getProjects = asynchandler(async (req, res) => {
-  const projects = await projectSchema.find({ area: req.params.id });
+  const projects = await projectSchema.find({
+    area: req.params.id,
+    user: req.user._id,
+  });
   res.status(200).json({ projects });
 });
 
@@ -22,6 +25,7 @@ const createProject = asynchandler(async (req, res) => {
     name,
     desc,
     area: req.params.id,
+    user: req.user._id,
   });
   res.status(200).json(createdProject);
 });
@@ -40,6 +44,10 @@ const updateProject = asynchandler(async (req, res) => {
     res.status(400);
     throw new Error("No such project exsists");
   }
+  if (project.user !== req.user._id) {
+    res.status(400);
+    throw new Error("Project is not owned by this user");
+  }
   const updatedProject = await projectSchema.findByIdAndUpdate(req.params.pid, {
     name,
     desc,
@@ -55,6 +63,10 @@ const deleteProject = asynchandler(async (req, res) => {
   if (!project) {
     res.status(400);
     throw new Error("No such project exsists");
+  }
+  if (project.user !== req.user._id) {
+    res.status(400);
+    throw new Error("Project is not owned by this user");
   }
   const subtasks = await taskSchema.find({ project: project._id });
   subtasks.forEach(async (subtask) => {
