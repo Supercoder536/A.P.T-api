@@ -37,7 +37,7 @@ const updateArea = asynchandler(async (req, res) => {
     res.status(400);
     throw new Error("No such area exsists");
   }
-  if (area.user !== req.user.id) {
+  if (area.user.toString() !== req.user._id) {
     res.status(400);
     throw new Error("Invalid User");
   }
@@ -57,9 +57,8 @@ const deleteArea = asynchandler(async (req, res) => {
     res.status(400);
     throw new Error("No such area exsists");
   }
-  if (area.user !== req.user.id) {
-    res.status(400);
-    throw new Error("Invalid User");
+  if (area.user.toString() != req.user._id) {
+    res.status(400).json({ area: area.user.toString(), req: req.user._id });
   }
   const projects = await projectSchema.find({ area: area._id });
   projects.forEach(async (project) => {

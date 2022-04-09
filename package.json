@@ -6,6 +6,9 @@
   "scripts": {
     "start": "node backend/server.js"
   },
+  "engines": {
+    "node": "14.x"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Supercoder536/A.P.T-api.git"
